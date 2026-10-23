@@ -14,7 +14,7 @@ body{font-family:var(--ui);font-weight:500;background:var(--bg);color:var(--ink)
 svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;display:block}
 button{font-family:inherit}
 .card{background:var(--card);border-radius:18px;border:1px solid var(--line);box-shadow:var(--sh)}
-#app{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:84px 300px minmax(0,1fr) 84px;gap:12px;padding:12px;position:relative}
+#app{flex:1;min-height:0;display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:84px 300px minmax(0,1fr) 0px 84px;gap:12px;padding:12px;position:relative;transition:grid-template-columns .22s ease}
 .rail{display:flex;flex-direction:column;gap:14px;padding:10px 0;overflow-y:auto}
 .rb{background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 4px;font-size:12px;font-weight:500;color:var(--ink);border-radius:12px;margin:0 6px}
 .rb:hover{background:rgba(255,255,255,.75)}.rb.on{background:var(--soft);color:var(--pri)}
@@ -71,8 +71,34 @@ canvas{flex:none;border-radius:4px;background:#000;box-shadow:0 8px 28px rgba(30
 .hd{position:absolute;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid var(--pri);cursor:nwse-resize}
 .hd.a{left:-7px;top:-7px}.hd.b{right:-7px;top:-7px}.hd.c{left:-7px;bottom:-7px}.hd.d{right:-7px;bottom:-7px}
 #fs{position:absolute;bottom:10px;left:10px;z-index:4}
-#pop{position:absolute;left:108px;top:24px;width:250px;padding:14px;z-index:20;display:flex;flex-direction:column;gap:12px}
-#pop[hidden]{display:none}
+#pop{padding:16px;display:flex;flex-direction:column;gap:14px;min-height:0;overflow-y:auto}#pop .phd b{font-size:16px}
+#app.haspop{grid-template-columns:84px 300px minmax(0,1fr) 300px 84px}
+@media(max-height:700px){#app.haspop{grid-template-columns:64px 250px minmax(0,1fr) 250px 64px}}
+@media(max-width:1000px){#app.haspop{grid-template-columns:70px 240px minmax(0,1fr) 240px 70px}}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fpv{border:2px solid var(--line);background:#fff;border-radius:12px;padding:5px;cursor:pointer;display:flex;flex-direction:column;gap:5px;align-items:stretch;color:var(--ink);font:500 12px var(--ui);transition:.15s}
+.fpv i{display:block;aspect-ratio:16/10;border-radius:8px;background-size:cover;background-position:center;background-color:#dfe6f5}
+.fpv:hover{border-color:#bcd3fb}.fpv.on{border-color:var(--pri);background:var(--soft);color:var(--pri)}
+#app>nav,#side,#center,#pop,#hm{grid-row:1}#app>nav:first-of-type{grid-column:1}#side{grid-column:2}#center{grid-column:3}#pop{grid-column:4}#app>nav:last-of-type{grid-column:5}
+#pop>*{min-width:208px}
+#pop{transition:opacity .18s ease,margin .22s ease,padding .22s ease,visibility .22s}
+#pop[hidden]{display:flex;visibility:hidden;opacity:0;padding-left:0;padding-right:0;border-width:0;margin:0 -6px;overflow:hidden;pointer-events:none}
+@keyframes pinL{from{opacity:0}to{opacity:1}}
+@keyframes pinR{from{opacity:0}to{opacity:1}}
+@keyframes fpop{from{opacity:0}to{opacity:1}}
+@keyframes mfade{from{opacity:0}to{opacity:1}}
+@keyframes mpop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#pop.pin>*{animation:pinL .2s ease both}
+#pop.pin .fpv{animation:fpop .2s ease both}
+#side.sin>#sidehead,#side.sin>#sbody{animation:pinR .18s ease both}
+.modal:not([hidden]){animation:mfade .15s ease}.modal:not([hidden]) .box{animation:mpop .2s ease}
+.rb{transition:background .15s,color .15s}
+.rb:disabled{opacity:.38;filter:grayscale(1);cursor:not-allowed;pointer-events:none}
+#app.home .rb.on:not(#gohome){background:none;color:var(--ink)}
+@keyframes hmin{from{opacity:0}to{opacity:1}}
+@keyframes edin{from{opacity:0}to{opacity:1}}
+#hm:not([hidden]){animation:hmin .2s ease both}
+#side.enter,#center.enter{animation:edin .22s ease both}
 .phd{display:flex;align-items:center;justify-content:space-between}
 #tl{flex:none;margin:0;overflow:hidden;display:flex;flex-direction:column;max-height:50vh}
 .tbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 14px;direction:ltr}
@@ -114,8 +140,8 @@ canvas{flex:none;border-radius:4px;background:#000;box-shadow:0 8px 28px rgba(30
 #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:60}
 #toast.on{opacity:1;transform:translateX(-50%)}
 body.drop #stage{outline:3px dashed var(--pri);outline-offset:-8px}
-@media(max-height:700px){#app{padding:8px;gap:8px;grid-template-columns:64px 250px minmax(0,1fr) 64px}.rb{font-size:11px;gap:5px;padding:8px 0}.rail{gap:8px}.logo{width:34px;height:34px;margin:2px auto 6px}.ibtn{width:32px;height:32px}.pbtn{width:38px;height:38px}.tbar{padding:6px 12px}#side{padding:12px}}
-@media(max-width:1000px){#app{grid-template-columns:70px 240px minmax(0,1fr) 70px}}
+@media(max-height:700px){#app{padding:8px;gap:8px;grid-template-columns:64px 250px minmax(0,1fr) 0px 64px}.rb{font-size:11px;gap:5px;padding:8px 0}.rail{gap:8px}.logo{width:34px;height:34px;margin:2px auto 6px}.ibtn{width:32px;height:32px}.pbtn{width:38px;height:38px}.tbar{padding:6px 12px}#side{padding:12px}}
+@media(max-width:1000px){#app{grid-template-columns:70px 240px minmax(0,1fr) 0px 70px}}
 button,input,textarea,select{font-family:var(--ui)}
 *{scrollbar-width:none}*::-webkit-scrollbar{display:none}
 #scroll{scrollbar-width:auto}
@@ -136,7 +162,7 @@ button,input,textarea,select{font-family:var(--ui)}
 .chip svg{display:inline-block;width:16px;height:16px;vertical-align:-3px;margin-left:4px}
 .lane.ruler{position:sticky;top:0;z-index:4}
 #scroll{overflow-anchor:none}
-#hm{position:fixed;inset:0;background:var(--bg);z-index:45;overflow-y:auto;display:flex;justify-content:center;padding:48px 24px}#hm[hidden]{display:none}
+#hm{grid-column:2/5;grid-row:1;z-index:5;min-height:0;background:linear-gradient(180deg,#f8faff,var(--bg));border:1px solid var(--line);border-radius:18px;overflow-y:auto;display:flex;justify-content:center;padding:36px 24px}#hm[hidden]{display:none}
 .hbox{width:min(1000px,100%);display:flex;flex-direction:column;gap:28px}
 .hhead{display:flex;align-items:center;justify-content:space-between}.hhead h1{margin:0;font-size:28px;font-weight:700}
 #hlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}
@@ -198,14 +224,14 @@ button,input,textarea,select{font-family:var(--ui)}
   <div id="scroll"><div id="inner"></div></div>
 </section>
   </div>
+  <div id="pop" class="card" hidden></div>
   <nav class="rail">
-    <button class="rb" data-tool="opa" title="עמעום"><span data-ic="opa"></span>עמעום</button>
     <button class="rb" data-tool="flt" title="מסננים"><span data-ic="flt"></span>מסננים</button>
     <button class="rb" data-tool="fx" title="אפקטים"><span data-ic="fx"></span>אפקטים</button>
     <button class="rb" data-tool="col" title="כוונון צבע"><span data-ic="col"></span>כוונון צבע</button>
     <button class="rb" data-tool="vol" title="עוצמה"><span data-ic="vol"></span>עוצמה</button>
   </nav>
-  <div id="pop" class="card" hidden></div>
+  <div id="hm"><div class="hbox"><div class="hhead"><h1>הפרויקטים שלי</h1><button class="btn pri" id="hnew"><span data-ic="plus"></span>פרויקט חדש</button></div><div id="hlist"></div><p class="note" style="margin:0">הפרויקטים נשמרים אוטומטית בדפדפן הזה, כולל קבצי המדיה.</p></div></div>
 </div>
 
 <input type="file" id="file" multiple hidden>
@@ -224,7 +250,6 @@ button,input,textarea,select{font-family:var(--ui)}
     </div>
   </div>
 </div>
-<div id="hm"><div class="hbox"><div class="hhead"><h1>הפרויקטים שלי</h1><button class="btn pri" id="hnew"><span data-ic="plus"></span>פרויקט חדש</button></div><div id="hlist"></div><p class="note" style="margin:0">הפרויקטים נשמרים אוטומטית בדפדפן הזה, כולל קבצי המדיה.</p></div></div>
 <div id="mq"></div>
 <div id="lmenu" class="card" hidden><button data-al="t">ערוץ טקסט</button><button data-al="v">ערוץ שכבת על</button><button data-al="a">ערוץ מוזיקה / שמע</button></div>
 <div id="toast"></div>
@@ -300,6 +325,7 @@ const tt=()=>Math.min(S.t,Math.max(0,total()-.001));
 const nomedia=c=>c.kind==='image'||c.kind==='text';
 function ensureCtx(){if(!ac){ac=new (window.AudioContext||window.webkitAudioContext)();dest=ac.createMediaStreamDestination()}return ac}
 const tiles=(g,o,cur)=>`<div class="tiles">${o.map(x=>`<button class="tile${x[0]===cur?' on':''}" data-g="${g}" data-v="${x[0]}">${x[1]}</button>`).join('')}</div>`;
+const fpv=c=>`<div class="fgrid">${FLT.map((x,k)=>`<button class="fpv${x[0]===c.filter?' on':''}" style="--k:${k}" data-g="filter" data-v="${x[0]}"><i style="background-image:${c.asset&&c.asset.thumb?`url('${c.asset.thumb}')`:'linear-gradient(135deg,#60a5fa,#f472b6,#fbbf24)'};filter:${FS[x[0]]||'none'}"></i><span>${x[1]}</span></button>`).join('')}</div>`;
 const rng=(p,l,a,b,s,v)=>`<div><label>${l}</label><input type="range" data-p="${p}" min="${a}" max="${b}" step="${s}" value="${v}"></div>`;
 
 /* היסטוריה */
@@ -390,19 +416,19 @@ $('#sbody').addEventListener('click',e=>{
   else if(c&&d.col){forSel(k=>{if(k.kind==='text')k.color=d.col});renderSide()}
   else if(c&&d.act==='bold'){const nv=c.bold?0:1;forSel(k=>{if(k.kind==='text')k.bold=nv});renderSide()}
   else if(c&&d.act==='tsnd'){const nv=c.tsnd?0:1;forSel(k=>{if(k.kind==='text')k.tsnd=nv});if(nv)typeClick(1);renderSide()}});
-document.querySelectorAll('.rb[data-tab]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.tab;renderSide()});
+document.querySelectorAll('.rb[data-tab]').forEach(b=>b.onclick=()=>{const sd=$('#side');sd.classList.remove('sin');void sd.offsetWidth;sd.classList.add('sin');clearTimeout(window.__st);window.__st=setTimeout(()=>sd.classList.remove('sin'),300);S.tab=b.dataset.tab;renderSide()});
 
 /* כלים משמאל */
 function renderPop(){
   const p=$('#pop'),c=find(S.sel),t=S.tool;
   document.querySelectorAll('.rb[data-tool]').forEach(x=>x.classList.toggle('on',x.dataset.tool===t));
-  if(!t){p.hidden=true;return}p.hidden=false;
+  const was=!p.hidden;p.hidden=!t;$('#app').classList.toggle('haspop',!!t);if(was!==!!t)setTimeout(()=>dispatchEvent(new Event('resize')),240);p.classList.toggle('pin',!!t&&(!was||t!==window.__lt));window.__lt=t;if(!t)return;
   let h=`<div class="phd"><b>${TOOLS[t]}</b><button class="ibtn sm" data-close>${ic('x')}</button></div>`;
   if(!c)h+='<p class="hint">בחרו קליפ בציר הזמן.</p>';
   else if(t==='vol')h+=c.kind==='video'||c.kind==='audio'?rng('vol','עוצמת קול',0,1.5,.05,c.vol):'<p class="hint">הכלי זמין לוידאו ולשמע.</p>';
   else if(c.kind==='audio')h+='<p class="hint">הכלי זמין לוידאו, תמונה וטקסט.</p>';
   else if(t==='opa')h+=rng('opa','שקיפות',.1,1,.05,c.opa);
-  else if(t==='flt')h+=c.kind==='text'?'<p class="hint">המסננים זמינים לוידאו ולתמונה.</p>':tiles('filter',FLT,c.filter);
+  else if(t==='flt')h+=c.kind==='text'?'<p class="hint">המסננים זמינים לוידאו ולתמונה.</p>':fpv(c);
   else if(t==='fx')h+=rng('blur','טשטוש',0,20,1,c.blur)+`<div class="chips"><button class="chip${c.vig?' on':''}" data-tg="vig">וינייטה</button><button class="chip${c.flip?' on':''}" data-tg="flip">היפוך</button></div>`;
   else h+=rng('br','בהירות',.5,1.5,.05,c.br)+rng('ct','ניגודיות',.5,1.5,.05,c.ct)+rng('sa','רוויה',0,2,.05,c.sa)+rng('hue','גוון',-180,180,5,c.hue)+'<button class="btn" data-reset>איפוס</button>';
   p.innerHTML=h}
@@ -745,6 +771,13 @@ $('#hlist').addEventListener('click',async e=>{const b=e.target.closest('button'
   else if(!b)openProject(c.dataset.open)});
 $('#hnew').onclick=newProject;$('#gohome').onclick=goHome;
 document.querySelectorAll('#hm [data-ic]').forEach(e=>e.innerHTML=ic(e.dataset.ic));
+(function(){const hm=$('#hm');let first=true;
+const sync=()=>{const h=!hm.hidden;$('#app').classList.toggle('home',h);
+  document.querySelectorAll('#app .rb:not(#gohome)').forEach(b=>b.disabled=h);$('#gohome').classList.toggle('on',h);
+  if(h&&S.tool){S.tool=null;renderPop()}
+  if(!h&&!first)['#side','#center'].forEach(q=>{const e=$(q);e.classList.remove('enter');void e.offsetWidth;e.classList.add('enter');setTimeout(()=>e.classList.remove('enter'),400)});
+  first=false};
+new MutationObserver(sync).observe(hm,{attributes:true,attributeFilter:['hidden']});sync()})();
 S.lanes=defLanes();setSize();renderSide();renderPop();renderTL();requestAnimationFrame(tick);
 (async()=>{try{const all=await dbAll('projects');if(!all.length)await newProject();else renderHome()}catch(e){renderHome()}})();
 </script>
